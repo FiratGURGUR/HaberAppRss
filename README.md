@@ -2,6 +2,7 @@
 
 Basit bir haber uygulaması. Haberler http://www.mynet.com/rss.html adresinden çekilmektedir.
 
+https://play.google.com/store/apps/details?id=com.developer.haberapprss
 
 ## Kullanılan Kütüphaneler 
 - Request için : https://github.com/amitshekhariitbhu/Fast-Android-Networking ve https://github.com/square/retrofit
