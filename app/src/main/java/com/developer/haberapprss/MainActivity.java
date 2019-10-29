@@ -4,20 +4,37 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.StringRequestListener;
 import com.developer.haberapprss.Kategori.KategoriList;
+import com.developer.haberapprss.Kategori.KategoriListAdapter;
+import com.developer.haberapprss.Kategori.KategoriListModel;
+import com.smarteist.autoimageslider.IndicatorAnimations;
+import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import fr.arnaudguyon.xmltojsonlib.XmlToJson;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView t_euro;
     TextView t_altin;
     TextView t_gbp;
+
+    SliderView sliderView;
+    List<SliderModel> katModelList;
+    SliderAdapterExample adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +84,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cardSondakika.setOnClickListener(this);
         cardSpor.setOnClickListener(this);
         cardSaglik.setOnClickListener(this);
+
+
+        sliderView = findViewById(R.id.imageSlider);
+        katModelList = new ArrayList<>();
+
+        getDatatoSlider("https://www.mynet.com/haber/rss/sondakika");
+
+
 
 
     }
@@ -178,6 +207,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
+
+    public void getDatatoSlider(String url){
+        AndroidNetworking.get(url)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            String xmlString = response;  // some XML String previously created
+                            XmlToJson xmlToJson = new XmlToJson.Builder(xmlString).build();
+                            JSONObject jsonObject = xmlToJson.toJson();
+
+                            String rss = jsonObject.getString("rss");
+                            JSONObject jsonObjectrss = new JSONObject(rss);
+                            String channel = jsonObjectrss.getString("channel");
+                            JSONObject jsonObjectitems = new JSONObject(channel);
+                            Log.i("firat" , " ************ "+ jsonObjectitems.toString());
+
+
+                            String entity = jsonObjectitems.getString("item");
+                            JSONArray entityArray = new JSONArray(entity);
+                            int k = entityArray.length();
+                            for (int i=0;i<11;i++){
+                                JSONObject jsonObject2 = entityArray.getJSONObject(i);
+                                String title = jsonObject2.getString("title");
+                                String pubDate = jsonObject2.getString("pubDate");
+                                String iplink = jsonObject2.getString("iplink");
+                                String description = jsonObject2.getString("description");
+                                String image = jsonObject2.getString("img300x300");
+                                String imagedetay = jsonObject2.getString("img640x360");
+
+                                Log.i("firat" , "IMAGEE " + image);
+
+                                katModelList.add(new SliderModel(image,title,pubDate,imagedetay,iplink));
+
+                            }
+                            adapter= new SliderAdapterExample(MainActivity.this,katModelList);
+                            adapter.setCount(katModelList.size());
+                            sliderView.setSliderAdapter(adapter);
+                            sliderView.setIndicatorAnimation(IndicatorAnimations.THIN_WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+                            sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+                            sliderView.setAutoCycleDirection(SliderView.SCREEN_STATE_ON);
+                            sliderView.setIndicatorSelectedColor(Color.WHITE);
+                            sliderView.setIndicatorUnselectedColor(Color.GRAY);
+                            sliderView.setOnIndicatorClickListener(new DrawController.ClickListener() {
+                                @Override
+                                public void onIndicatorClicked(int position) {
+                                    sliderView.setCurrentPagePosition(position);
+                                }
+                            });
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+
+    }
 
 
 
