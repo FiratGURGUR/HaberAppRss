@@ -7,7 +7,7 @@ public class SliderModel {
     private String haberDetayResim;
     private String iplink;
 
-
+    //
     public SliderModel(String haberResim, String haberBaslik,String haberTarih,String haberDetayResim,String iplink) {
         this.haberResim = haberResim;
         this.haberBaslik = haberBaslik;
