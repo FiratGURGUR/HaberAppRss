@@ -10,4 +10,4 @@ https://play.google.com/store/apps/details?id=com.developer.haberapprss
 - Xml to Json : https://github.com/smart-fun/XmlToJson
 
 ### Screenshots
-<img src="https://github.com/FiratGURGUR/HaberAppRss/blob/master/app/src/main/res/drawable/screenshot1.jpg" width="30%">    <img src="https://github.com/FiratGURGUR/HaberAppRss/blob/master/app/src/main/res/drawable/screenshot2.jpg" width="30%">    <img src="https://github.com/FiratGURGUR/HaberAppRss/blob/master/app/src/main/res/drawable/screenshot3.jpg" width="30%">
+<img src="https://github.com/FiratGURGUR/HaberAppRss/blob/master/app/src/main/res/drawable/screenshot1.jpg" width="30%">    <img src="https://github.com/FiratGURGUR/HaberAppRss/blob/master/app/src/main/res/drawable/screenshot2.jpg" width="30%">    <img src="https://github.com/FiratGURGUR/HaberAppRss/blob/master/app/src/main/res/drawable/screenshot4.jpg" width="30%">
